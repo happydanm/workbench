@@ -1,5 +1,5 @@
 /* 离线缓存：先给缓存，后台顺手更新 */
-var CACHE = 'workbench-v5';
+var CACHE = 'workbench-v6';
 var ASSETS = [
   './',
   './index.html',
@@ -9,7 +9,8 @@ var ASSETS = [
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './icons/icon-maskable-512.png'
 ];
 
 self.addEventListener('install', function (e) {

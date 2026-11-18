@@ -523,8 +523,6 @@
   window.workbench = { open: openSheet, close: closeSheet };
 
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
-    });
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
   }
 })();
