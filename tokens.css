@@ -1,0 +1,38 @@
+/* 设计变量：柔和立体（Neumorphism） */
+:root {
+  /* 颜色 */
+  --bg: #E9EDF2;
+  --card: #E9EDF2;
+  --ink: #2D3440;
+  --ink-2: #556072;
+  --muted: #5C6675;
+  --line: #D3D9E1;
+  --primary: #3E5BD8;
+  --on-primary: #FFFFFF;
+  --accent: #22A06B;      /* 只做图形，不写字 */
+  --link: #3E5BD8;
+
+  /* 形状 */
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+
+  /* 光影：一亮一暗两道，凸起；按下换内阴影 */
+  --shadow-raised: 6px 6px 14px #C8CED6, -6px -6px 14px #FFFFFF;
+  --shadow-raised-sm: 4px 4px 10px #C8CED6, -4px -4px 10px #FFFFFF;
+  --shadow-inset: inset 4px 4px 10px #C8CED6, inset -4px -4px 10px #FFFFFF;
+  --shadow-inset-sm: inset 2px 2px 6px #C8CED6, inset -2px -2px 6px #FFFFFF;
+  --shadow-press: inset 5px 5px 12px #C8CED6, inset -5px -5px 12px #FFFFFF;
+
+  /* 字体 */
+  --font-title: "SF Pro Rounded", "PingFang SC", "HarmonyOS Sans SC", system-ui, sans-serif;
+  --font-body: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+
+  /* 字号阶梯：只用这六级 */
+  --fs-xs: 12px;
+  --fs-body: 15px;
+  --fs-title: 16px;
+  --fs-num: 24px;
+  --fs-display: 32px;
+  --fs-timer: 46px;
+}
