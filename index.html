@@ -1,179 +1,146 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>冯铭谦的工作台</title>
-<meta name="theme-color" content="#E9EDF2">
-<meta name="description" content="冯铭谦的个人工作台：待办、专注、课表、速记、记账、资料，一屏搞定。">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="application-name" content="工作台">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="工作台">
-<link rel="stylesheet" href="tokens.css">
-<link rel="stylesheet" href="styles.css">
+<!-- ========== 新增PWA配置 ========== -->
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#3b82f6">
+<!-- ================================= -->
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system}
+body{background:#f3f4f6;color:#1f2937;padding:16px;max-width:720px;margin:0 auto}
+.header{margin-bottom:18px}
+.header h2{font-size:22px}
+.header .sub{color:#6b7280;margin-top:4px}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 1px 4px #00000010}
+.card h3{margin-bottom:10px;font-size:17px}
+.todo-item{display:flex;gap:8px;align-items:center;margin:8px 0}
+input,textarea{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;margin:6px 0}
+button{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer}
+.timer-display{font-size:36px;text-align:center;margin:12px 0;font-weight:bold}
+.tab-bar{display:flex;gap:4px;margin-top:20px}
+.tab-bar button{flex:1;background:#e5e7eb;color:#222;font-size:13px;padding:8px}
+.tab-bar button.active{background:#3b82f6;color:#fff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+#installBtn{width:100%;margin:10px 0;background:#10b981}
+</style>
 </head>
 <body>
-<main class="page">
+<div class="header">
+  <h2>冯铭谦的工作台</h2>
+  <div class="sub">今日重点：完成 WORKBUDDY 作业截图</div>
+</div>
 
-  <header class="top">
-    <span class="top-date"><span id="date">11月19日 · 周四</span><span class="sep">/</span><span id="week">第 47 周</span></span>
-    <span class="avatar" aria-hidden="true">冯</span>
-  </header>
+<!-- 安装按钮 -->
+<button id="installBtn" disabled>📥 安装为应用</button>
 
-  <section class="who">
-    <p class="hi" id="greet">上午好</p>
-    <h1>冯铭谦</h1>
-  </section>
-
-  <section class="card hero" aria-labelledby="heroTitle">
-    <div class="hero-row">
-      <div class="ring-wrap">
-        <svg class="ring" viewBox="0 0 120 120" role="img" aria-label="今日完成进度">
-          <circle class="ring-track" cx="60" cy="60" r="52"></circle>
-          <circle class="ring-bar" id="ringBar" cx="60" cy="60" r="52"></circle>
-        </svg>
-        <span class="ring-num"><span id="doneCount">1</span><span class="ring-slash">/</span><span id="allCount">4</span></span>
-      </div>
-      <div class="hero-text">
-        <span class="label" id="heroTitle">今日重点</span>
-        <p class="next" id="nextTask">完成 WORKBUDDY 作业截图</p>
-        <span class="meta" id="heroMeta">还有 3 件事</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="bento">
-
-    <article class="card span2 tasks" id="tasks" aria-labelledby="taskTitle">
-      <div class="card-head">
-        <h2 id="taskTitle">待办<span class="count" id="taskCount">3</span></h2>
-        <button class="ghost-btn" id="clearDone" type="button">清空已完成</button>
-      </div>
-      <ul class="task-list" id="taskList"></ul>
-      <form class="add-row" id="addForm" autocomplete="off">
-        <input id="addInput" type="text" placeholder="加一件要做的事…" maxlength="40" aria-label="新的待办">
-        <button class="add-btn" type="submit" aria-label="添加待办">＋</button>
-      </form>
-    </article>
-
-    <article class="card timer" id="timer" aria-labelledby="timerTitle">
-      <div class="card-head">
-        <h2 id="timerTitle">专注</h2>
-        <span class="mode">25 分钟</span>
-      </div>
-      <p class="timer-num" id="timerNum">25:00</p>
-      <div class="timer-actions">
-        <button class="primary-btn" id="startBtn" type="button">开始</button>
-        <button class="ghost-btn" id="resetBtn" type="button">重置</button>
-      </div>
-    </article>
-
-    <article class="card memo" id="memo" aria-labelledby="memoTitle">
-      <div class="card-head">
-        <h2 id="memoTitle">速记</h2>
-        <span class="mode" id="noteState">自动保存</span>
-      </div>
-      <textarea id="noteBox" class="note-box" rows="3" placeholder="随手记点什么…"></textarea>
-    </article>
-
-    <article class="card span2 sched" id="schedule" aria-labelledby="schedTitle">
-      <div class="card-head">
-        <h2 id="schedTitle">今天的课</h2>
-        <span class="mode" id="schedDay">周四</span>
-      </div>
-      <ol class="sched-list">
-        <li><span class="t">08:00</span><span class="n">数据结构</span><span class="r">A302</span></li>
-        <li><span class="t">10:00</span><span class="n">大学英语</span><span class="r">B105</span></li>
-        <li><span class="t">14:00</span><span class="n">计算机组成</span><span class="r">C211</span></li>
-      </ol>
-    </article>
-
-  </section>
-
-  <nav class="dock" aria-label="工作台模块">
-    <button class="dock-item" type="button" data-target="tasks">
-      <span class="dock-icon i-check"></span><span>待办</span>
-    </button>
-    <button class="dock-item" type="button" data-target="timer">
-      <span class="dock-icon i-timer"></span><span>专注</span>
-    </button>
-    <button class="dock-item" type="button" data-target="schedule">
-      <span class="dock-icon i-cal"></span><span>课表</span>
-    </button>
-    <button class="dock-item" type="button" data-target="memo">
-      <span class="dock-icon i-note"></span><span>速记</span>
-    </button>
-    <button class="dock-item" type="button" data-sheet="ledger">
-      <span class="dock-icon i-wallet"></span><span>记账</span>
-    </button>
-    <button class="dock-item" type="button" data-sheet="links">
-      <span class="dock-icon i-doc"></span><span>资料</span>
-    </button>
-  </nav>
-
-  <button class="install-btn" id="installBtn" type="button" hidden>安装到桌面</button>
-
-  <footer class="foot">
-    <span class="sign">冯铭谦 · 个人工作台</span>
-    <span class="sep">·</span>
-    <span>数据只存在本机</span>
-  </footer>
-
-</main>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<div class="backdrop" id="backdrop" hidden></div>
-
-<section class="sheet" id="sheet-ledger" role="dialog" aria-modal="true" aria-labelledby="ledgerTitle" hidden>
-  <div class="sheet-head">
-    <h2 id="ledgerTitle">记账</h2>
-    <button class="icon-btn" type="button" data-close aria-label="关闭">×</button>
+<div class="card">
+  <h3>待办清单</h3>
+  <div id="todoList"></div>
+  <div style="display:flex;gap:6px">
+    <input id="todoInput" placeholder="添加待办事项">
+    <button onclick="addTodo()">添加</button>
   </div>
+</div>
 
-  <div class="sum-row">
-    <div class="sum">
-      <span class="sum-label">今日支出</span>
-      <span class="sum-num" id="outSum">¥0.00</span>
-    </div>
-    <div class="sum">
-      <span class="sum-label">今日收入</span>
-      <span class="sum-num" id="inSum">¥0.00</span>
-    </div>
+<div class="card">
+  <h3>专注计时器（25分钟）</h3>
+  <div class="timer-display" id="timer">25:00</div>
+  <div style="display:flex;gap:6px">
+    <button onclick="startTimer()">开始</button>
+    <button onclick="pauseTimer()">暂停</button>
+    <button onclick="resetTimer()">重置</button>
   </div>
+</div>
 
-  <form class="ledger-form" id="ledgerForm" autocomplete="off">
-    <input id="ledgerAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="金额" aria-label="金额">
-    <input id="ledgerNote" type="text" maxlength="20" placeholder="花在哪了" aria-label="备注">
-    <div class="seg" role="group" aria-label="收支类型">
-      <button class="seg-btn is-on" type="button" data-type="out">支出</button>
-      <button class="seg-btn" type="button" data-type="in">收入</button>
-    </div>
-    <button class="primary-btn" type="submit">记一笔</button>
-  </form>
+<div class="card">
+  <h3>课表</h3>
+  <div>数据结构｜大学英语｜计算机组成原理</div>
+</div>
 
-  <ul class="ledger-list" id="ledgerList"></ul>
-</section>
+<div class="card">
+  <h3>速记</h3>
+  <textarea id="note" rows="4" placeholder="在这里记录文字"></textarea>
+  <button onclick="saveNote()">保存速记</button>
+</div>
 
-<section class="sheet" id="sheet-links" role="dialog" aria-modal="true" aria-labelledby="linksTitle" hidden>
-  <div class="sheet-head">
-    <h2 id="linksTitle">资料</h2>
-    <button class="icon-btn" type="button" data-close aria-label="关闭">×</button>
-  </div>
+<div class="card">
+  <h3>记账</h3>
+  <input id="moneyInput" placeholder="金额，备注">
+  <button onclick="saveBill()">记录</button>
+  <div id="billList"></div>
+</div>
 
-  <form class="links-form" id="linksForm" autocomplete="off">
-    <input id="linkName" type="text" maxlength="12" placeholder="名称" aria-label="名称">
-    <input id="linkUrl" type="text" placeholder="链接" aria-label="链接">
-    <button class="primary-btn span2" type="submit">添加到资料</button>
-  </form>
+<!-- 底部标签 -->
+<div class="tab-bar">
+  <button class="active" data-tab="all">待办</button>
+  <button data-tab="focus">专注</button>
+  <button data-tab="schedule">课表</button>
+  <button data-tab="note">速记</button>
+  <button data-tab="bill">记账</button>
+</div>
 
-  <ul class="link-list" id="linkList"></ul>
-</section>
+<script>
+// ========== 待办 ==========
+let todoList = JSON.parse(localStorage.getItem("todoList")) || [];
+function renderTodo(){
+  const wrap = document.getElementById("todoList");
+  wrap.innerHTML = "";
+  todoList.forEach((item,i)=>{
+    wrap.innerHTML += `<div class="todo-item">
+      <input type="checkbox" ${item.done?"checked":""} onchange="toggleTodo(${i})">
+      <span style="${item.done?"text-decoration:line-through;color:#888":""}">${item.text}</span>
+      <button onclick="delTodo(${i})" style="background:#ef4444;padding:4px 8px">×</button>
+    </div>`
+  })
+}
+function addTodo(){
+  const val = document.getElementById("todoInput").value.trim();
+  if(!val)return;
+  todoList.push({text:val,done:false});
+  localStorage.setItem("todoList",JSON.stringify(todoList));
+  document.getElementById("todoInput").value="";renderTodo();
+}
+function toggleTodo(i){todoList[i].done=!todoList[i].done;localStorage.setItem("todoList",JSON.stringify(todoList));renderTodo()}
+function delTodo(i){todoList.splice(i,1);localStorage.setItem("todoList",JSON.stringify(todoList));renderTodo()}
+renderTodo();
 
-<script src="app.js"></script>
-</body>
-</html>
+// ========== 速记 ==========
+const noteDom = document.getElementById("note");
+noteDom.value = localStorage.getItem("workNote")||"";
+function saveNote(){localStorage.setItem("workNote",noteDom.value);alert("已保存")}
+
+// ========== 记账 ==========
+let bills = JSON.parse(localStorage.getItem("billList"))||[];
+function renderBill(){
+  const wrap = document.getElementById("billList");
+  wrap.innerHTML = bills.map(x=>`<div>${x.txt}</div>`).join("")
+}
+function saveBill(){
+  const txt = document.getElementById("moneyInput").value.trim();
+  if(!txt)return;
+  bills.push({txt});
+  localStorage.setItem("billList",JSON.stringify(bills));
+  document.getElementById("moneyInput").value="";renderBill();
+}
+renderBill();
+
+// ========== 25分钟计时器 ==========
+let timerId = null;
+let leftSec = 25*60;
+function updateTimer(){
+  const m = String(Math.floor(leftSec/60)).padStart(2,"0");
+  const s = String(leftSec%60).padStart(2,"0");
+  document.getElementById("timer").innerText = `${m}:${s}`
+}
+function startTimer(){
+  if(timerId)return;
+  timerId = setInterval(()=>{
+    if(leftSec>0){leftSec--;updateTimer()}
+    else{clearInterval(timerId);timerId=null;alert("时间到！")}
+  },1000)
+}
+function pauseTimer(){c
