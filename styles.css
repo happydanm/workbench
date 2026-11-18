@@ -707,6 +707,27 @@ body.no-scroll { overflow: hidden; }
   font-size: var(--fs-xs);
 }
 
+/* ---------- 安装按钮：只有浏览器支持 PWA 安装时才出现 ---------- */
+
+.install-btn {
+  align-self: center;
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.install-btn[hidden] { display: none; }
+
+.install-btn:active { box-shadow: var(--shadow-press); }
+
 /* ---------- 页脚 / 提示 ---------- */
 
 .foot {

@@ -511,6 +511,36 @@
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
   }
 
+  /* ---------- 安装入口 ---------- */
+
+  var installBtn = $('installBtn');
+  var deferredPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.hidden = false;
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', function () {
+      if (!deferredPrompt) {
+        toast('这个浏览器不支持安装，用菜单里的「添加到桌面」');
+        return;
+      }
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function () {
+        deferredPrompt = null;
+        installBtn.hidden = true;
+      });
+    });
+  }
+
+  window.addEventListener('appinstalled', function () {
+    if (installBtn) installBtn.hidden = true;
+    toast('已装到桌面');
+  });
+
   /* ---------- 启动 ---------- */
 
   tick();

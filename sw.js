@@ -1,5 +1,5 @@
 /* 离线缓存：先给缓存，后台顺手更新 */
-var CACHE = 'workbench-v6';
+var CACHE = 'workbench-v7';
 var ASSETS = [
   './',
   './index.html',
